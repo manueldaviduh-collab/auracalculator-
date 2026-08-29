@@ -36,10 +36,10 @@ export const QUESTIONS: Question[] = [
       es: '¿Cuánto mides?',
     },
     options: [
-      { id: 'q2-a', trait: 'calm', weight: 1, expression: 'neutral', text: { en: '55–62 in', es: '140–159 cm' } },
-      { id: 'q2-b', trait: 'mystery', weight: 2, expression: 'neutral', text: { en: '63–66 in', es: '160–169 cm' } },
-      { id: 'q2-c', trait: 'light', weight: 3, expression: 'smug', text: { en: '67–70 in', es: '170–179 cm' } },
-      { id: 'q2-d', trait: 'energy', weight: 4, expression: 'cool', text: { en: '71–74 in', es: '180–189 cm' } },
+      { id: 'q2-a', trait: 'calm', weight: 1, expression: 'neutral', text: { en: '4\'7"–5\'2"', es: '140–159 cm' } },
+      { id: 'q2-b', trait: 'mystery', weight: 2, expression: 'neutral', text: { en: '5\'3"–5\'6"', es: '160–169 cm' } },
+      { id: 'q2-c', trait: 'light', weight: 3, expression: 'smug', text: { en: '5\'7"–5\'10"', es: '170–179 cm' } },
+      { id: 'q2-d', trait: 'energy', weight: 4, expression: 'cool', text: { en: '5\'11"–6\'2"', es: '180–189 cm' } },
     ],
   },
   {
