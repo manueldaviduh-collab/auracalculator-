@@ -1,5 +1,6 @@
+import { FACES, FACE_INK, FACE_LAYOUT, type EyeShape, type EyebrowShape, type MouthShape } from '@/lib/faceShapes'
 import { APP_URL, SHARE_CARD_SIZE } from '@/config'
-import { TRAIT_COLORS, formatDisplayScore } from '@/lib/scoring'
+import { TIER_EXPRESSIONS, TRAIT_COLORS, formatDisplayScore } from '@/lib/scoring'
 import type { AuraResult } from '@/types'
 
 export interface ShareCardCopy {
@@ -26,8 +27,12 @@ export async function renderAuraCardBlob(result: AuraResult, copy: ShareCardCopy
   const colors = TRAIT_COLORS[result.dominantTrait]
   const cx = width / 2
 
+  const orbCy = height * 0.32
+  const orbRadius = width * 0.24
+
   drawBackground(ctx, width, height)
-  drawOrb(ctx, cx, height * 0.32, width * 0.24, colors.core)
+  drawOrb(ctx, cx, orbCy, orbRadius, colors.core)
+  drawFace(ctx, cx, orbCy, orbRadius, TIER_EXPRESSIONS[result.tier])
   drawScoreBlock(ctx, cx, width, height, colors.core, result, copy)
   drawReservedFooterBand(ctx, width, height)
 
@@ -69,6 +74,241 @@ function drawOrb(ctx: CanvasRenderingContext2D, cx: number, cy: number, radius: 
   ctx.beginPath()
   ctx.arc(cx, cy, radius * 1.18, 0, Math.PI * 2)
   ctx.stroke()
+}
+
+/**
+ * Draws the mascot's final expression on the orb — mirrors the shape logic
+ * in components/AuraFace.tsx (same FACES config) so the share card shows the
+ * same character the app does, just via canvas paths instead of SVG/JSX.
+ */
+function drawFace(ctx: CanvasRenderingContext2D, cx: number, cy: number, ballRadius: number, expression: keyof typeof FACES) {
+  const spec = FACES[expression]
+  const scale = (ballRadius * 0.714) / 50
+  const { leftX, rightX, eyeY, mouthY } = FACE_LAYOUT
+  const toX = (sx: number) => cx + (sx - 50) * scale
+  const toY = (sy: number) => cy + (sy - 50) * scale
+  const s = (n: number) => n * scale
+
+  ctx.save()
+  ctx.strokeStyle = FACE_INK
+  ctx.fillStyle = FACE_INK
+  ctx.lineCap = 'round'
+
+  drawEyebrows(ctx, spec.eyebrows ?? 'none', toX, toY, s, leftX, rightX, eyeY)
+
+  if (spec.blush) {
+    ctx.fillStyle = 'rgba(255,107,163,0.5)'
+    ctx.beginPath()
+    ctx.arc(toX(leftX - 3), toY(eyeY + 11), s(5), 0, Math.PI * 2)
+    ctx.fill()
+    ctx.beginPath()
+    ctx.arc(toX(rightX + 3), toY(eyeY + 11), s(5), 0, Math.PI * 2)
+    ctx.fill()
+    ctx.fillStyle = FACE_INK
+  }
+
+  if (spec.leftEye === 'shades') {
+    ctx.fillStyle = FACE_INK
+    roundRect(ctx, toX(leftX - 11), toY(eyeY - 6), s(rightX - leftX + 22), s(12), s(6))
+    ctx.fill()
+    ctx.fillStyle = 'rgba(255,255,255,0.5)'
+    roundRect(ctx, toX(leftX - 7), toY(eyeY - 3), s(10), s(4), s(2))
+    ctx.fill()
+  } else {
+    drawEye(ctx, spec.leftEye, toX(leftX), toY(eyeY), s)
+    drawEye(ctx, spec.rightEye, toX(rightX), toY(eyeY), s)
+  }
+
+  ctx.fillStyle = FACE_INK
+  ctx.strokeStyle = FACE_INK
+  drawMouth(ctx, spec.mouth, toX(50), toY(mouthY), s)
+
+  if (spec.tears) {
+    ctx.fillStyle = '#7cd6f9'
+    drawTear(ctx, toX(leftX - 2), toY(eyeY + 8), s)
+    drawTear(ctx, toX(rightX + 2), toY(eyeY + 8), s)
+  }
+
+  ctx.restore()
+}
+
+function drawEye(ctx: CanvasRenderingContext2D, shape: EyeShape, cx: number, cy: number, s: (n: number) => number) {
+  switch (shape) {
+    case 'dot':
+      ctx.beginPath()
+      ctx.arc(cx, cy, s(4.5), 0, Math.PI * 2)
+      ctx.fill()
+      return
+    case 'happy':
+      ctx.lineWidth = s(4)
+      ctx.beginPath()
+      ctx.moveTo(cx - s(7), cy + s(3))
+      ctx.quadraticCurveTo(cx, cy - s(7), cx + s(7), cy + s(3))
+      ctx.stroke()
+      return
+    case 'wide':
+      ctx.fillStyle = '#ffffff'
+      ctx.beginPath()
+      ctx.arc(cx, cy, s(7), 0, Math.PI * 2)
+      ctx.fill()
+      ctx.fillStyle = FACE_INK
+      ctx.beginPath()
+      ctx.arc(cx, cy, s(3.2), 0, Math.PI * 2)
+      ctx.fill()
+      return
+    case 'flat':
+      ctx.lineWidth = s(4)
+      ctx.beginPath()
+      ctx.moveTo(cx - s(7), cy)
+      ctx.lineTo(cx + s(7), cy)
+      ctx.stroke()
+      return
+    case 'heart':
+      ctx.beginPath()
+      ctx.moveTo(cx, cy + s(5))
+      ctx.bezierCurveTo(cx - s(8), cy - s(4), cx - s(3), cy - s(9), cx, cy - s(4))
+      ctx.bezierCurveTo(cx + s(3), cy - s(9), cx + s(8), cy - s(4), cx, cy + s(5))
+      ctx.closePath()
+      ctx.fill()
+      return
+    case 'x':
+      ctx.lineWidth = s(3.4)
+      ctx.beginPath()
+      ctx.moveTo(cx - s(5), cy - s(5))
+      ctx.lineTo(cx + s(5), cy + s(5))
+      ctx.moveTo(cx - s(5), cy + s(5))
+      ctx.lineTo(cx + s(5), cy - s(5))
+      ctx.stroke()
+      return
+    case 'up':
+      ctx.beginPath()
+      ctx.arc(cx + s(1), cy - s(3), s(4), 0, Math.PI * 2)
+      ctx.fill()
+      return
+    case 'shades':
+      return
+  }
+}
+
+function drawMouth(ctx: CanvasRenderingContext2D, shape: MouthShape, cx: number, cy: number, s: (n: number) => number) {
+  switch (shape) {
+    case 'flat':
+      ctx.lineWidth = s(4)
+      ctx.beginPath()
+      ctx.moveTo(cx - s(9), cy)
+      ctx.lineTo(cx + s(9), cy)
+      ctx.stroke()
+      return
+    case 'smile':
+      ctx.lineWidth = s(4)
+      ctx.beginPath()
+      ctx.moveTo(cx - s(10), cy - s(2))
+      ctx.quadraticCurveTo(cx, cy + s(9), cx + s(10), cy - s(2))
+      ctx.stroke()
+      return
+    case 'grin':
+      ctx.beginPath()
+      ctx.moveTo(cx - s(12), cy - s(2))
+      ctx.quadraticCurveTo(cx, cy + s(14), cx + s(12), cy - s(2))
+      ctx.quadraticCurveTo(cx, cy + s(6), cx - s(12), cy - s(2))
+      ctx.closePath()
+      ctx.fill()
+      return
+    case 'o':
+      ctx.beginPath()
+      ctx.ellipse(cx, cy + s(2), s(5), s(7), 0, 0, Math.PI * 2)
+      ctx.fill()
+      return
+    case 'smirk':
+      ctx.lineWidth = s(4)
+      ctx.beginPath()
+      ctx.moveTo(cx - s(8), cy)
+      ctx.quadraticCurveTo(cx + s(4), cy + s(7), cx + s(12), cy - s(4))
+      ctx.stroke()
+      return
+    case 'openLaugh':
+      ctx.beginPath()
+      ctx.moveTo(cx - s(13), cy - s(4))
+      ctx.quadraticCurveTo(cx, cy + s(18), cx + s(13), cy - s(4))
+      ctx.quadraticCurveTo(cx, cy + s(8), cx - s(13), cy - s(4))
+      ctx.closePath()
+      ctx.fill()
+      return
+    case 'frown':
+      ctx.lineWidth = s(4)
+      ctx.beginPath()
+      ctx.moveTo(cx - s(9), cy + s(4))
+      ctx.quadraticCurveTo(cx, cy - s(7), cx + s(9), cy + s(4))
+      ctx.stroke()
+      return
+    case 'wavy':
+      ctx.lineWidth = s(3.4)
+      ctx.beginPath()
+      ctx.moveTo(cx - s(9), cy)
+      ctx.quadraticCurveTo(cx - s(4.5), cy - s(4), cx, cy)
+      ctx.quadraticCurveTo(cx + s(4.5), cy + s(4), cx + s(9), cy)
+      ctx.stroke()
+      return
+    case 'ellipsis':
+      ctx.beginPath()
+      for (const dx of [-8, 0, 8]) {
+        ctx.moveTo(cx + s(dx) + s(2.4), cy)
+        ctx.arc(cx + s(dx), cy, s(2.4), 0, Math.PI * 2)
+      }
+      ctx.fill()
+      return
+  }
+}
+
+function drawEyebrows(
+  ctx: CanvasRenderingContext2D,
+  shape: EyebrowShape,
+  toX: (n: number) => number,
+  toY: (n: number) => number,
+  s: (n: number) => number,
+  leftX: number,
+  rightX: number,
+  eyeY: number,
+) {
+  if (shape === 'none') return
+  const y = eyeY - 11
+  ctx.lineWidth = s(3.4)
+  ctx.beginPath()
+  if (shape === 'angry') {
+    ctx.moveTo(toX(leftX - 7), toY(y - 2))
+    ctx.lineTo(toX(leftX + 6), toY(y + 3))
+    ctx.moveTo(toX(rightX + 7), toY(y - 2))
+    ctx.lineTo(toX(rightX - 6), toY(y + 3))
+  } else if (shape === 'raised') {
+    ctx.moveTo(toX(leftX - 7), toY(y + 3))
+    ctx.lineTo(toX(leftX + 6), toY(y - 2))
+    ctx.moveTo(toX(rightX - 6), toY(y - 2))
+    ctx.lineTo(toX(rightX + 7), toY(y + 3))
+  } else {
+    ctx.moveTo(toX(leftX - 7), toY(y))
+    ctx.lineTo(toX(leftX + 7), toY(y))
+    ctx.moveTo(toX(rightX - 7), toY(y))
+    ctx.lineTo(toX(rightX + 7), toY(y))
+  }
+  ctx.stroke()
+}
+
+function drawTear(ctx: CanvasRenderingContext2D, x: number, y: number, s: (n: number) => number) {
+  ctx.beginPath()
+  ctx.moveTo(x, y)
+  ctx.quadraticCurveTo(x - s(3), y + s(6), x, y + s(10))
+  ctx.quadraticCurveTo(x + s(3), y + s(6), x, y)
+  ctx.fill()
+}
+
+function roundRect(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, r: number) {
+  ctx.beginPath()
+  ctx.moveTo(x + r, y)
+  ctx.arcTo(x + w, y, x + w, y + h, r)
+  ctx.arcTo(x + w, y + h, x, y + h, r)
+  ctx.arcTo(x, y + h, x, y, r)
+  ctx.arcTo(x, y, x + w, y, r)
+  ctx.closePath()
 }
 
 function drawScoreBlock(

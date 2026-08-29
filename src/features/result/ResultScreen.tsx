@@ -6,7 +6,7 @@ import { GlowButton } from '@/components/GlowButton'
 import { HaloOrb } from '@/components/HaloOrb'
 import { APP_URL } from '@/config'
 import { shareAuraResult, type ShareOutcome } from '@/lib/share'
-import { TRAIT_COLORS, formatDisplayScore } from '@/lib/scoring'
+import { TIER_EXPRESSIONS, TRAIT_COLORS, formatDisplayScore } from '@/lib/scoring'
 import { useCountUp } from '@/lib/useCountUp'
 import { useAppStore } from '@/store/useAppStore'
 
@@ -56,7 +56,7 @@ export function ResultScreen() {
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5, ease: 'easeOut' }}
       >
-        <HaloOrb core={colors.core} glow={colors.glow} size={200} />
+        <HaloOrb core={colors.core} glow={colors.glow} size={200} expression={TIER_EXPRESSIONS[result.tier]} />
       </motion.div>
 
       <p className="mt-6 font-display text-xs font-semibold uppercase tracking-[0.2em] text-ink-faint">

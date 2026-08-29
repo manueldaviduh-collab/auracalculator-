@@ -1,4 +1,6 @@
 import { motion } from 'framer-motion'
+import { AuraFace } from '@/components/AuraFace'
+import type { Expression } from '@/types'
 
 interface HaloOrbProps {
   core: string
@@ -6,6 +8,8 @@ interface HaloOrbProps {
   size?: number
   pulse?: boolean
   spin?: boolean
+  /** When set, the orb doubles as the mascot — a face pops onto the core. */
+  expression?: Expression
 }
 
 /**
@@ -13,7 +17,7 @@ interface HaloOrbProps {
  * ring and a soft ambient halo. Color is passed in so it can react to the
  * dominant trait (loading screen, result screen) or stay neutral (idle uses).
  */
-export function HaloOrb({ core, glow, size = 220, pulse = true, spin = true }: HaloOrbProps) {
+export function HaloOrb({ core, glow, size = 220, pulse = true, spin = true, expression }: HaloOrbProps) {
   return (
     <div className="relative grid place-items-center" style={{ width: size, height: size }}>
       <motion.div
@@ -45,6 +49,11 @@ export function HaloOrb({ core, glow, size = 220, pulse = true, spin = true }: H
         animate={pulse ? { scale: [1, 1.045, 1] } : undefined}
         transition={{ duration: 2.6, repeat: Infinity, ease: 'easeInOut' }}
       />
+      {expression && (
+        <div className="absolute inset-0 grid place-items-center">
+          <AuraFace expression={expression} size={size * 0.4} />
+        </div>
+      )}
     </div>
   )
 }

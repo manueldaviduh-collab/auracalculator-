@@ -56,7 +56,7 @@ export const es: typeof en = {
     },
   },
   adSlot: {
-    label: 'Espacio patrocinado',
+    label: 'Publicidad',
   },
   share: {
     success: '¡Listo! Compártela donde quieras.',

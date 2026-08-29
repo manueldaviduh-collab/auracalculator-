@@ -1,5 +1,5 @@
 import { QUESTIONS } from '@/data/questions'
-import type { AuraAnswer, AuraResult, AuraTier, Trait, TraitBreakdown } from '@/types'
+import type { AuraAnswer, AuraResult, AuraTier, Expression, Trait, TraitBreakdown } from '@/types'
 
 export const TRAITS: Trait[] = ['energy', 'calm', 'mystery', 'chaos', 'light']
 
@@ -10,6 +10,16 @@ export const TRAIT_COLORS: Record<Trait, { core: string; glow: string }> = {
   mystery: { core: '#b57cf9', glow: 'rgba(181, 124, 249, 0.45)' },
   chaos: { core: '#ff6ba3', glow: 'rgba(255, 107, 163, 0.45)' },
   light: { core: '#7cf9d8', glow: 'rgba(124, 249, 216, 0.45)' },
+}
+
+/** The mascot's face for the final reveal — one mood per tier, escalating toward "can't stop laughing". */
+export const TIER_EXPRESSIONS: Record<AuraTier, Expression> = {
+  dormant: 'shy',
+  balanced: 'neutral',
+  vibrant: 'friendly',
+  radiant: 'hype',
+  legendary: 'cool',
+  mythic: 'crying-laughing',
 }
 
 const RAW_MIN = QUESTIONS.length * 1

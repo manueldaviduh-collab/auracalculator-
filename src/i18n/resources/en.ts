@@ -54,7 +54,7 @@ export const en = {
     },
   },
   adSlot: {
-    label: 'Sponsored space',
+    label: 'Advertisement',
   },
   share: {
     success: 'Saved! Share it anywhere.',

@@ -31,7 +31,7 @@ export function CalculatingScreen() {
 
   return (
     <div className="flex min-h-dvh flex-col items-center justify-center gap-8 px-6 text-center">
-      <HaloOrb core={colors.core} glow={colors.glow} size={200} spin />
+      <HaloOrb core={colors.core} glow={colors.glow} size={200} spin expression="thinking" />
 
       <div className="space-y-3">
         <h2 className="font-display text-2xl font-bold text-ink">{t('calculating.title')}</h2>

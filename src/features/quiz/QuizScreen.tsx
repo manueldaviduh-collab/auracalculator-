@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { HaloOrb } from '@/components/HaloOrb'
 import { ProgressBar } from '@/components/ProgressBar'
 import { QUESTIONS } from '@/data/questions'
 import { useAppStore } from '@/store/useAppStore'
@@ -8,6 +9,8 @@ import type { Language } from '@/types'
 import { AnswerOption } from './AnswerOption'
 
 const ADVANCE_DELAY_MS = 380
+const MASCOT_CORE = '#b57cf9'
+const MASCOT_GLOW = 'rgba(181,124,249,0.4)'
 
 export function QuizScreen() {
   const { t } = useTranslation()
@@ -19,6 +22,7 @@ export function QuizScreen() {
   const [selectedId, setSelectedId] = useState<string | null>(null)
 
   const question = QUESTIONS[currentQuestionIndex]
+  const activeExpression = question?.options.find((o) => o.id === selectedId)?.expression ?? 'neutral'
 
   function handleSelect(optionId: string) {
     if (selectedId) return
@@ -53,7 +57,11 @@ export function QuizScreen() {
         <ProgressBar current={currentQuestionIndex} total={QUESTIONS.length} />
       </header>
 
-      <p className="pt-4 text-center text-xs font-display font-semibold uppercase tracking-[0.2em] text-ink-faint">
+      <div className="flex justify-center pt-3">
+        <HaloOrb core={MASCOT_CORE} glow={MASCOT_GLOW} size={100} expression={activeExpression} />
+      </div>
+
+      <p className="pt-3 text-center text-xs font-display font-semibold uppercase tracking-[0.2em] text-ink-faint">
         {t('quiz.question', { current: currentQuestionIndex + 1, total: QUESTIONS.length })}
       </p>
 

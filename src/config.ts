@@ -13,3 +13,14 @@ export const FEATURES = {
 } as const
 
 export const SHARE_CARD_SIZE = { width: 1080, height: 1920 } as const
+
+/**
+ * AdSense readiness. `FEATURES.ads` is the master switch (stays off until
+ * the share loop is validated); `clientId`/`slotId` are the two values
+ * AdSlot needs once there's an approved AdSense account — paste them in and
+ * flip the flag, no other code changes required.
+ */
+export const ADSENSE = {
+  clientId: '', // e.g. 'ca-pub-XXXXXXXXXXXXXXXX'
+  slotId: '', // e.g. '1234567890'
+} as const

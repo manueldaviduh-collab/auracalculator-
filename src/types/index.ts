@@ -6,12 +6,31 @@ export type Trait = 'energy' | 'calm' | 'mystery' | 'chaos' | 'light'
 
 export type AuraTier = 'dormant' | 'balanced' | 'vibrant' | 'radiant' | 'legendary' | 'mythic'
 
+/** Faces the mascot can pull — one per option (reacting to the tap) and one per tier (the final reveal). */
+export type Expression =
+  | 'neutral'
+  | 'shy'
+  | 'chaotic'
+  | 'friendly'
+  | 'hype'
+  | 'smug'
+  | 'cool'
+  | 'deadpan'
+  | 'love'
+  | 'shocked'
+  | 'sad'
+  | 'evil'
+  | 'crying-laughing'
+  | 'thinking'
+
 export interface QuestionOption {
   id: string
   text: Record<Language, string>
   trait: Trait
   /** 1 (mild) to 4 (intense) — feeds the hidden score, never shown to the user. */
   weight: 1 | 2 | 3 | 4
+  /** The mascot's reaction when this option is tapped. */
+  expression: Expression
 }
 
 export interface Question {
