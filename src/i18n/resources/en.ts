@@ -30,7 +30,7 @@ export const en = {
     share: 'Share My Aura',
     retake: 'Retake the quiz',
     tiers: {
-      dormant: 'Dormant',
+      dormant: 'Laura',
       balanced: 'Balanced',
       vibrant: 'Vibrant',
       radiant: 'Radiant',

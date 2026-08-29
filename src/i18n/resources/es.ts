@@ -32,7 +32,7 @@ export const es: typeof en = {
     share: 'Compartir Mi Aura',
     retake: 'Repetir el quiz',
     tiers: {
-      dormant: 'Dormida',
+      dormant: 'Laura',
       balanced: 'Equilibrada',
       vibrant: 'Vibrante',
       radiant: 'Radiante',

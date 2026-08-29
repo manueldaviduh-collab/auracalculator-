@@ -28,13 +28,27 @@ const DISPLAY_BASE = 900
 const DISPLAY_MULTIPLIER = 205
 const VARIANCE_RANGE = 300
 
-const TIER_THRESHOLDS: { max: number; tier: AuraTier }[] = [
-  { max: 3999, tier: 'dormant' },
-  { max: 5299, tier: 'balanced' },
-  { max: 6599, tier: 'vibrant' },
-  { max: 7899, tier: 'radiant' },
-  { max: 8999, tier: 'legendary' },
-  { max: Infinity, tier: 'mythic' },
+/**
+ * Tier is decided from the raw weight sum, not the jittered display number —
+ * two people with the same raw score always land in the same tier; only the
+ * cosmetic "+X,XXX" number wobbles.
+ *
+ * Every question has exactly one option per weight (1-4), so a player who
+ * has no idea which option is "worth more" effectively sums 10 dice rolls
+ * uniform on {1,2,3,4}. That distribution clusters tightly around 25 — with
+ * naive evenly-spaced thresholds, real plays almost never reach Dormant or
+ * Legendary/Mythic, they just pile up in the middle tiers. These cutoffs are
+ * calibrated against that actual distribution (10 iid U{1,2,3,4}) so every
+ * tier gets a real, if uneven, chance to show up: ~6% dormant, ~18% balanced,
+ * ~20% vibrant, ~31% radiant, ~18% legendary, ~6% mythic.
+ */
+const TIER_THRESHOLDS: { maxRaw: number; tier: AuraTier }[] = [
+  { maxRaw: 19, tier: 'dormant' },
+  { maxRaw: 22, tier: 'balanced' },
+  { maxRaw: 24, tier: 'vibrant' },
+  { maxRaw: 27, tier: 'radiant' },
+  { maxRaw: 30, tier: 'legendary' },
+  { maxRaw: Infinity, tier: 'mythic' },
 ]
 
 /** Deterministic djb2-style hash so retaking with the same answers reproduces the same flashy number. */
@@ -47,8 +61,8 @@ function hashAnswers(answers: AuraAnswer[]): number {
   return Math.abs(hash)
 }
 
-function tierForScore(score: number): AuraTier {
-  return TIER_THRESHOLDS.find((t) => score <= t.max)?.tier ?? 'mythic'
+function tierForRaw(raw: number): AuraTier {
+  return TIER_THRESHOLDS.find((t) => raw <= t.maxRaw)?.tier ?? 'mythic'
 }
 
 export function computeAuraResult(answers: AuraAnswer[]): AuraResult {
@@ -73,7 +87,7 @@ export function computeAuraResult(answers: AuraAnswer[]): AuraResult {
   const clampedRaw = Math.min(Math.max(rawScore, RAW_MIN), RAW_MAX)
   const variance = hashAnswers(answers) % VARIANCE_RANGE
   const displayScore = DISPLAY_BASE + clampedRaw * DISPLAY_MULTIPLIER + variance
-  const tier = tierForScore(displayScore)
+  const tier = tierForRaw(clampedRaw)
 
   return {
     id: crypto.randomUUID(),
