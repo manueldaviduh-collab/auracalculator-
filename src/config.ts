@@ -1,7 +1,7 @@
 export const APP_NAME = 'Aura Calculator'
 
-/** Update once the app has a real domain — used for share captions and the card watermark. */
-export const APP_URL = 'auracalc.app'
+/** Used for share captions and the card watermark. Update if the domain ever changes. */
+export const APP_URL = 'auracalculator-two.vercel.app'
 
 /**
  * Kill switches for the next milestones. The MVP goal is validating whether
