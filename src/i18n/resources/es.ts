@@ -9,6 +9,7 @@ export const es: typeof en = {
     eyebrow: 'Gratis · 10 preguntas rápidas',
     title: '¿Cómo se ve tu aura hoy?',
     subtitle: 'Responde 10 preguntas rápidas y leeremos la energía que estás transmitiendo.',
+    hook: '¿Estás listo para ver cuánta aura desbordas?',
     cta: 'Calcular Mi Aura',
     footer: 'Sin registro. Sin respuestas incorrectas. Solo vibra.',
   },

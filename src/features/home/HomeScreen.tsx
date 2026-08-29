@@ -43,10 +43,19 @@ export function HomeScreen() {
           </p>
         </motion.div>
 
-        <motion.div
+        <motion.p
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.3 }}
+          className="font-display text-lg font-bold text-ink sm:text-xl"
+        >
+          {t('home.hook')}
+        </motion.p>
+
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.4 }}
           className="w-full max-w-xs"
         >
           <GlowButton size="xl" onClick={startQuiz} className="w-full">

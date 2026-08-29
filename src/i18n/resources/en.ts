@@ -7,6 +7,7 @@ export const en = {
     eyebrow: 'Free · 10 quick questions',
     title: "What does your aura look like today?",
     subtitle: "Answer 10 fast questions and we'll read the energy you're putting out.",
+    hook: "Ready to see how much aura you're radiating?",
     cta: 'Calculate My Aura',
     footer: 'No sign-up. No wrong answers. Just vibes.',
   },
