@@ -1,7 +1,7 @@
 export const APP_NAME = 'Aura Calculator'
 
 /** The bare domain — used for the card's visual watermark, which isn't a tappable link anyway. */
-export const APP_URL = 'auracalculator-two.vercel.app'
+export const APP_URL = 'auracalculator.app'
 
 /**
  * The full, protocol-qualified URL. Share captions must use this one, not
