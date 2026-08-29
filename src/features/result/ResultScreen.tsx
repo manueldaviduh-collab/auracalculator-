@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { AdSlot } from '@/components/AdSlot'
 import { GlowButton } from '@/components/GlowButton'
 import { HaloOrb } from '@/components/HaloOrb'
-import { APP_URL } from '@/config'
+import { APP_FULL_URL } from '@/config'
 import { shareAuraResult, type ShareOutcome } from '@/lib/share'
 import { TIER_EXPRESSIONS, TRAIT_COLORS, formatDisplayScore } from '@/lib/scoring'
 import { useCountUp } from '@/lib/useCountUp'
@@ -43,7 +43,7 @@ export function ResultScreen() {
       tierLabel,
       traitLabel,
       tagline,
-      caption: t('share.caption', { score: formatDisplayScore(result.displayScore), tier: tierLabel, url: APP_URL }),
+      caption: t('share.caption', { score: formatDisplayScore(result.displayScore), tier: tierLabel, url: APP_FULL_URL }),
     })
     setShareStatus(outcome)
     window.setTimeout(() => setShareStatus('idle'), 2600)

@@ -1,7 +1,15 @@
 export const APP_NAME = 'Aura Calculator'
 
-/** Used for share captions and the card watermark. Update if the domain ever changes. */
+/** The bare domain — used for the card's visual watermark, which isn't a tappable link anyway. */
 export const APP_URL = 'auracalculator-two.vercel.app'
+
+/**
+ * The full, protocol-qualified URL. Share captions must use this one, not
+ * APP_URL: WhatsApp (and most apps) only auto-linkify a URL in shared text
+ * when it starts with a scheme — a bare domain just renders as plain text,
+ * which is exactly the "people have to copy-paste it" problem this fixes.
+ */
+export const APP_FULL_URL = `https://${APP_URL}`
 
 /**
  * Kill switches for the next milestones. The MVP goal is validating whether
