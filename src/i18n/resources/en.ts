@@ -10,6 +10,7 @@ export const en = {
     hook: "Ready to see how much aura you're radiating?",
     cta: 'Calculate My Aura',
     footer: 'No sign-up. No wrong answers. Just vibes.',
+    privacy: 'Privacy Policy',
   },
   quiz: {
     question: 'Question {{current}} of {{total}}',

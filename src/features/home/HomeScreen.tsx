@@ -64,7 +64,12 @@ export function HomeScreen() {
         </motion.div>
       </main>
 
-      <footer className="pb-4 text-center text-xs text-ink-faint">{t('home.footer')}</footer>
+      <footer className="space-y-1 pb-4 text-center text-xs text-ink-faint">
+        <p>{t('home.footer')}</p>
+        <a href="/privacy.html" className="underline underline-offset-2 hover:text-ink-dim">
+          {t('home.privacy')}
+        </a>
+      </footer>
     </div>
   )
 }

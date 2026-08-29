@@ -12,6 +12,7 @@ export const es: typeof en = {
     hook: '¿Estás listo para ver cuánta aura desbordas?',
     cta: 'Calcular Mi Aura',
     footer: 'Sin registro. Sin respuestas incorrectas. Solo vibra.',
+    privacy: 'Política de privacidad',
   },
   quiz: {
     question: 'Pregunta {{current}} de {{total}}',
