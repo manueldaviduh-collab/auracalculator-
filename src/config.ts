@@ -29,6 +29,8 @@ export const SHARE_CARD_SIZE = { width: 1080, height: 1920 } as const
  * flip the flag, no other code changes required.
  */
 export const ADSENSE = {
-  clientId: '', // e.g. 'ca-pub-XXXXXXXXXXXXXXXX'
-  slotId: '', // e.g. '1234567890'
+  clientId: 'ca-pub-6657434215441331',
+  // Still empty on purpose: AdSlot renders nothing without a real ad unit,
+  // so nothing shows up until there's a deliberately-placed slot to fill.
+  slotId: '',
 } as const
