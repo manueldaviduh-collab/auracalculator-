@@ -1,14 +1,18 @@
 import { AnimatePresence, motion } from 'framer-motion'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { AdSlot } from '@/components/AdSlot'
+import { ConfettiBurst } from '@/components/ConfettiBurst'
 import { GlowButton } from '@/components/GlowButton'
 import { HaloOrb } from '@/components/HaloOrb'
 import { APP_FULL_URL } from '@/config'
+import { revealFeedback } from '@/lib/feedback'
 import { shareAuraResult, type ShareOutcome } from '@/lib/share'
 import { TIER_EXPRESSIONS, TRAIT_COLORS, formatDisplayScore } from '@/lib/scoring'
 import { useCountUp } from '@/lib/useCountUp'
 import { useAppStore } from '@/store/useAppStore'
+
+const CELEBRATION_TIERS = new Set(['legendary', 'mythic'])
 
 const SHARE_MESSAGE_KEY: Record<ShareOutcome, string> = {
   shared: 'share.success',
@@ -25,6 +29,11 @@ export function ResultScreen() {
   const [shareStatus, setShareStatus] = useState<ShareOutcome | 'idle' | 'sharing'>('idle')
 
   const displayScore = useCountUp(result?.displayScore ?? 0)
+
+  const revealTier = result?.tier
+  useEffect(() => {
+    if (revealTier) revealFeedback(revealTier)
+  }, [revealTier])
 
   if (!result) {
     goHome()
@@ -50,7 +59,9 @@ export function ResultScreen() {
   }
 
   return (
-    <div className="safe-top safe-bottom flex min-h-dvh flex-col items-center px-6 py-10 text-center">
+    <div className="safe-top safe-bottom relative flex min-h-dvh flex-col items-center px-6 py-10 text-center">
+      {CELEBRATION_TIERS.has(result.tier) && <ConfettiBurst />}
+
       <motion.div
         initial={{ opacity: 0, scale: 0.85 }}
         animate={{ opacity: 1, scale: 1 }}

@@ -2,6 +2,7 @@ import type { AuraResult } from '@/types'
 
 const ANON_ID_KEY = 'aura.anonId'
 const HISTORY_KEY = 'aura.history'
+const SOUND_KEY = 'aura.sound'
 const MAX_HISTORY = 20
 
 function safeParse<T>(raw: string | null, fallback: T): T {
@@ -37,4 +38,14 @@ export function saveResult(result: AuraResult): void {
 
 export function clearHistory(): void {
   window.localStorage.removeItem(HISTORY_KEY)
+}
+
+/** Sound + haptics preference. Defaults to on; only stored once the user touches the toggle. */
+export function getSoundEnabled(): boolean {
+  const raw = window.localStorage.getItem(SOUND_KEY)
+  return raw === null ? true : raw === '1'
+}
+
+export function setSoundEnabled(enabled: boolean): void {
+  window.localStorage.setItem(SOUND_KEY, enabled ? '1' : '0')
 }

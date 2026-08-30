@@ -2,6 +2,8 @@ export const en = {
   common: {
     langEn: 'EN',
     langEs: 'ES',
+    muteSound: 'Mute sound',
+    unmuteSound: 'Unmute sound',
   },
   home: {
     eyebrow: 'Free · 10 quick questions',

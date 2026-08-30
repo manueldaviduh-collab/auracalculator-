@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { HaloOrb } from '@/components/HaloOrb'
 import { ProgressBar } from '@/components/ProgressBar'
 import { QUESTIONS } from '@/data/questions'
+import { tapFeedback } from '@/lib/feedback'
 import { useAppStore } from '@/store/useAppStore'
 import type { Language } from '@/types'
 import { AnswerOption } from './AnswerOption'
@@ -26,6 +27,7 @@ export function QuizScreen() {
 
   function handleSelect(optionId: string) {
     if (selectedId) return
+    tapFeedback()
     setSelectedId(optionId)
     window.setTimeout(() => {
       answerQuestion(question.id, optionId)

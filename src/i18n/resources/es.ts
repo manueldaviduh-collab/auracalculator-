@@ -4,6 +4,8 @@ export const es: typeof en = {
   common: {
     langEn: 'EN',
     langEs: 'ES',
+    muteSound: 'Silenciar sonido',
+    unmuteSound: 'Activar sonido',
   },
   home: {
     eyebrow: 'Gratis · 10 preguntas rápidas',

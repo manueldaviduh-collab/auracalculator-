@@ -2,7 +2,7 @@ import { create } from 'zustand'
 import { QUESTIONS } from '@/data/questions'
 import i18n, { persistLanguage } from '@/i18n'
 import { computeAuraResult } from '@/lib/scoring'
-import { saveResult } from '@/lib/storage'
+import { getSoundEnabled, saveResult, setSoundEnabled } from '@/lib/storage'
 import type { AuraAnswer, AuraResult, Language, Screen } from '@/types'
 
 interface AppState {
@@ -11,6 +11,7 @@ interface AppState {
   currentQuestionIndex: number
   answers: AuraAnswer[]
   result: AuraResult | null
+  soundEnabled: boolean
 
   setLanguage: (lang: Language) => void
   goHome: () => void
@@ -19,6 +20,7 @@ interface AppState {
   goToPreviousQuestion: () => void
   finishCalculating: () => void
   retake: () => void
+  toggleSound: () => void
 }
 
 export const useAppStore = create<AppState>((set, get) => ({
@@ -27,6 +29,7 @@ export const useAppStore = create<AppState>((set, get) => ({
   currentQuestionIndex: 0,
   answers: [],
   result: null,
+  soundEnabled: getSoundEnabled(),
 
   setLanguage: (lang) => {
     void i18n.changeLanguage(lang)
@@ -67,4 +70,10 @@ export const useAppStore = create<AppState>((set, get) => ({
   finishCalculating: () => set({ screen: 'result' }),
 
   retake: () => set({ screen: 'quiz', currentQuestionIndex: 0, answers: [], result: null }),
+
+  toggleSound: () => {
+    const next = !get().soundEnabled
+    setSoundEnabled(next)
+    set({ soundEnabled: next })
+  },
 }))

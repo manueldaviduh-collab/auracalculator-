@@ -4,6 +4,7 @@ import { GlowButton } from '@/components/GlowButton'
 import { HaloOrb } from '@/components/HaloOrb'
 import { LanguageSwitcher } from '@/components/LanguageSwitcher'
 import { Logo } from '@/components/Logo'
+import { SoundToggle } from '@/components/SoundToggle'
 import { useAppStore } from '@/store/useAppStore'
 
 export function HomeScreen() {
@@ -14,7 +15,10 @@ export function HomeScreen() {
     <div className="safe-top safe-bottom flex min-h-dvh flex-col px-6">
       <header className="flex items-center justify-between py-2">
         <Logo size={30} />
-        <LanguageSwitcher />
+        <div className="flex items-center gap-2">
+          <SoundToggle />
+          <LanguageSwitcher />
+        </div>
       </header>
 
       <main className="flex flex-1 flex-col items-center justify-center gap-8 py-10 text-center">
